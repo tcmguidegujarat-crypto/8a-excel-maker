@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>8 અ exel maker</title>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,"Noto Sans Gujarati",sans-serif;background:#f3f6fb;color:#182230}
+.wrap{max-width:1120px;margin:30px auto;padding:0 14px}
+.hero{background:linear-gradient(135deg,#2855df,#6146e9);color:#fff;padding:30px;border-radius:24px 24px 0 0;box-shadow:0 14px 35px rgba(30,50,130,.18)}
+h1{margin:0;font-size:34px}.hero p{margin:8px 0 0;font-size:14px}
+.card{background:#fff;padding:25px;border-radius:0 0 24px 24px;box-shadow:0 14px 35px rgba(16,24,40,.08)}
+.upload{border:2px dashed #cbd5e1;background:#fbfcff;padding:22px;border-radius:17px}
+.upload b{font-size:18px}.sub{font-size:13px;color:#667085;margin:7px 0 16px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+input[type=file]{padding:10px;border:1px solid #d9dee8;border-radius:10px;background:#fff}
+button{border:0;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer}
+#go{background:#315bea;color:#fff}#dl{background:#119447;color:#fff}
+button:disabled{opacity:.45;cursor:not-allowed}
+#fileName{font-size:12px;color:#667085;margin-top:10px}
+.status{margin-top:16px;padding:14px;border:1px solid #e1e6ef;border-radius:13px}
+.top{display:flex;justify-content:space-between;gap:10px;font-size:14px}
+.bar{height:8px;background:#e9edf5;border-radius:20px;margin-top:10px;overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,#315bea,#7c3aed)}
+.success{background:#f0fdf4;border-color:#b7e5c4;color:#166534}
+.error{background:#fff5f5;border-color:#fecaca;color:#991b1b}
+.features{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0}
+.feature{padding:15px;border:1px solid #e5e7eb;border-radius:14px;background:#fbfcff}
+.feature strong{display:block;font-size:13px;margin-bottom:5px}.feature span{font-size:12px;color:#667085}
+.head{display:flex;justify-content:space-between;align-items:center;margin:5px 0 12px}
+.head h2{margin:0;font-size:20px}.badge{font-size:12px;font-weight:700;color:#3730a3;background:#eef2ff;padding:6px 10px;border-radius:99px}
+.table{border:1px solid #e5e7eb;border-radius:14px;overflow:auto;max-height:570px}
+table{border-collapse:collapse;width:100%;min-width:760px}
+th,td{padding:11px 13px;border-bottom:1px solid #e8ebf0;text-align:left;font-size:14px}
+th{position:sticky;top:0;background:#f7f8fc;z-index:1}.empty{text-align:center;color:#667085;padding:40px}
+.note{font-size:12px;color:#667085;line-height:1.6;margin-top:15px}
+@media(max-width:700px){.features{grid-template-columns:1fr 1fr}.hero{padding:23px}.card{padding:16px}h1{font-size:28px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="hero">
+<h1>8 અ exel maker</h1>
+<p>Convert your 8-A Excel file into a clean, downloadable Excel sheet.</p>
+</div>
+<div class="card">
+<div class="upload" id="drop">
+<b>Upload 8-A Excel File</b>
+<div class="sub">Upload the original 8-A XLSX/XLS/CSV file. PDF is not required.</div>
+<div class="row">
+<input id="file" type="file" accept=".xlsx,.xls,.csv">
+<button id="go">Process Excel</button>
+<button id="dl" disabled>Download Excel</button>
+</div>
+<div id="fileName">No file selected.</div>
+</div>
+
+<div id="status" class="status">
+<div class="top"><strong id="msg">Ready. Select your 8-A Excel file.</strong><span id="count">0 records</span></div>
+<div class="bar"><div id="fill" class="fill"></div></div>
+</div>
+
+<div class="features">
+<div class="feature"><strong>Column 1</strong><span>Khata Number</span></div>
+<div class="feature"><strong>Column 2</strong><span>First Khatedar name (Gujarati)</span></div>
+<div class="feature"><strong>Column 3</strong><span>Blue Total Area</span></div>
+<div class="feature"><strong>Column 4</strong><span>Blue Total Aakar Judi</span></div>
+</div>
+
+<div class="head"><h2>Preview</h2><span id="badge" class="badge">0 records</span></div>
+<div class="table">
+<table>
+<thead><tr><th>Khata Number</th><th>Khatedar Name</th><th>Area (0000.00)</th><th>Aakar Judi</th></tr></thead>
+<tbody id="body"><tr><td colspan="4" class="empty">Your processed data will appear here.</td></tr></tbody>
+</table>
+</div>
+
+<div class="note">
+Khatedar names remain in Gujarati. Area and Aakar Judi are taken ONLY from the BLUE “કુલ સરવે નંબરો” row in Column B.
+The blue row may be on the first owner row or on a later row. Example: 1-08-25 → 108.25 and 16.06 → 16.06.
+</div>
+</div>
+</div>
+
+<script>
+(function(){
+
+const fileEl=document.getElementById("file");
+const go=document.getElementById("go");
+const dl=document.getElementById("dl");
+const msg=document.getElementById("msg");
+const count=document.getElementById("count");
+const fill=document.getElementById("fill");
+const status=document.getElementById("status");
+const body=document.getElementById("body");
+const badge=document.getElementById("badge");
+const fileName=document.getElementById("fileName");
+const drop=document.getElementById("drop");
+
+let result=[];
+
+/*
+  IMPORTANT:
+  Blogger can alter/preserve Unicode differently depending on how HTML is pasted.
+  Therefore the key Gujarati labels are constructed from Unicode code points,
+  instead of putting the labels themselves inside JavaScript regex literals.
+*/
+const K1=String.fromCodePoint(
+  0x0a96,0x0abe,0x0aa4,0x0abe,0x20,0x0aa8,0x0a82,0x0aac,0x0ab0
+);
+const K2=String.fromCodePoint(
+  0x0a95,0x0ac1,0x0ab2,0x20,0x0a96,0x0abe,0x0aa4,0x0ac7,0x0aa6,0xabe,0xab0
+);
+const K3=String.fromCodePoint(
+  0x0a95,0xac1,0xab2,0x20,0x0ab8,0xab0,0x0acd,0xab5,0xac7,0x20,0x0aa8,0x0a82,0x0aac,0xab0,0xacb
+);
+const GU="૦૧૨૩૪૫૬૭૮૯";
+const EN="0123456789";
+
+function clean(v){
+  return String(v==null?"":v)
+    .replace(/\u200c|\u200d/g,"")
+    .replace(/\s+/g," ")
+    .trim();
+}
+
+function digits(v){
+  let s=String(v==null?"":v);
+  for(let i=0;i<10;i++) s=s.split(GU[i]).join(EN[i]);
+  /*
+    In this particular workbook, the OCR/export character "પ"
+    occurs where digit 5 occurs in some numeric cells.
+  */
+  s=s.replace(/\u0aaa/g,"5");
+  return s;
+}
+
+function setStatus(t,p,type){
+  msg.textContent=t;
+  fill.style.width=Math.max(0,Math.min(100,p))+"%";
+  status.classList.remove("success","error");
+  if(type) status.classList.add(type);
+}
+
+/*
+  Find Khata header without requiring an exact fixed spelling after colon.
+  Example:
+    ખાતા નંબર : ૧
+    ખાતા નંબર : પ
+*/
+function getKhata(text){
+  const s=clean(text).replace(/\s+/g,"");
+  /*
+    Actual workbook text:
+    ખાતા નંબર : ૧
+    खातા નંબર : પ
+    Some exported files use the OCR-like Gujarati "પ" for digit 5.
+  */
+  const m=s.match(/^.*?ખાતાનંબર[:：-]?([૦-૯0-9પ૫]+)/);
+  if(!m) return "";
+  return digits(m[1]).replace(/\D/g,"");
+}
+
+function isTotalOwner(text){
+  const s=clean(text).replace(/\s+/g,"");
+  return s.indexOf("કુલખાતેદાર")>=0;
+}
+
+function isBlueTotal(text){
+  const s=clean(text).replace(/\s+/g,"");
+  return s.indexOf("કુલસરવે")>=0 ||
+         s.indexOf("કુલસર્વે")>=0;
+}
+
+function isOwner(text){
+  const s=clean(text);
+  return /^[૦-૯0-9પ૫]+\s*[.)]/.test(s);
+}
+
+function nameOnly(text){
+  return clean(text)
+    .replace(/^[૦-૯0-9પ૫]+\s*[.)]\s*/,"")
+    .replace(/\s*\(\s*[૦-૯0-9પ૫]+\s*\)\s*$/,"")
+    .trim();
+}
+
+/*
+  Land area conversion:
+  1-08-25  -> 108.25
+  0-49-57  -> 49.57
+  2-39-78  -> 239.78
+*/
+function area(v){
+  let s=digits(clean(v)).replace(/\s+/g,"");
+  const m=s.match(/^(\d+)[-–](\d+)[-–](\d+)$/);
+  if(!m) return "";
+
+  const h=parseInt(m[1],10);
+  const a=parseInt(m[2],10);
+  const sq=parseInt(m[3],10);
+
+  if(!Number.isFinite(h)||!Number.isFinite(a)||!Number.isFinite(sq)) return "";
+
+  const value=h*100+a+sq/100;
+  return value.toFixed(2);
+}
+
+function money(v){
+  let s=digits(clean(v))
+    .replace(/,/g,".")
+    .replace(/\s+/g,"");
+  if(!s) return "";
+
+  const m=s.match(/^(\d+)(?:\.(\d+))?$/);
+  if(!m) return "";
+
+  const whole=m[1];
+  const dec=(m[2]||"").padEnd(2,"0").slice(0,2);
+  return whole+"."+dec;
+}
+
+/* Khatedar names remain in Gujarati exactly as supplied. */
+function transliterate(text){
+  return clean(text);
+}
+
+/*
+  ACTUAL 8-A PARSER
+
+  A = Khata / Khatedar
+  B = BLUE "કુલ સરવે નંબરો" label
+  D = Area
+  F = Aakar Judi
+
+  IMPORTANT:
+  The BLUE total row may be:
+    1) on the SAME row as the first owner, or
+    2) on a later row, or
+    3) on a row whose column A says "કુલ ખાતેદાર".
+  We therefore check column B on EVERY row.
+*/
+function parse8A(matrix){
+  const out=[];
+  let currentKhata="";
+  let firstOwnerName="";
+
+  for(let r=0;r<matrix.length;r++){
+    const row=matrix[r]||[];
+    const a=clean(row[0]);
+    const b=clean(row[1]);
+    const d=clean(row[3]);
+    const f=clean(row[5]);
+
+    const k=getKhata(a);
+
+    if(k){
+      currentKhata=k;
+      firstOwnerName="";
+      continue;
+    }
+
+    if(!currentKhata) continue;
+
+    /*
+      First numbered owner under the Khata.
+      It can be 1., 2., 3., etc.
+    */
+    if(!firstOwnerName && isOwner(a)){
+      firstOwnerName=nameOnly(a);
+    }
+
+    /*
+      BLUE total row is the ONLY source for Area/Aakar Judi.
+      This check intentionally happens after first-owner detection so
+      a blue row that is also an owner row works correctly.
+    */
+    if(isBlueTotal(b)){
+      const ar=area(d);
+      const aj=money(f);
+
+      if(firstOwnerName && ar && aj){
+        out.push({
+          account:currentKhata,
+          name:firstOwnerName,
+          area:ar,
+          assessment:aj
+        });
+      }
+
+      currentKhata="";
+      firstOwnerName="";
+    }
+  }
+
+  return out;
+}
+
+async function readExcel(file){
+  const buffer=await file.arrayBuffer();
+  setStatus("Reading Excel file...",20);
+
+  if(typeof XLSX==="undefined"){
+    throw new Error("Excel library could not be loaded. Please refresh the page and try again.");
+  }
+
+  const wb=XLSX.read(buffer,{
+    type:"array",
+    raw:false,
+    cellText:true,
+    cellNF:false
+  });
+
+  if(!wb.SheetNames.length){
+    throw new Error("No worksheet was found in the uploaded Excel file.");
+  }
+
+  let matrix=null;
+  let bestScore=-1;
+
+  for(const sheetName of wb.SheetNames){
+    const sh=wb.Sheets[sheetName];
+    const m=XLSX.utils.sheet_to_json(sh,{
+      header:1,
+      raw:false,
+      defval:"",
+      blankrows:true
+    });
+
+    let score=0;
+
+    for(let i=0;i<Math.min(m.length,80);i++){
+      const text=(m[i]||[]).map(clean).join(" ");
+      if(text.indexOf(K1)>=0) score+=10;
+      if(isOwner(text)) score+=1;
+      if(area(m[i]?.[3])) score+=1;
+    }
+
+    if(score>bestScore){
+      bestScore=score;
+      matrix=m;
+    }
+  }
+
+  if(!matrix || !matrix.length){
+    throw new Error("The uploaded Excel file appears to be empty.");
+  }
+
+  setStatus("Finding Khata records...",55);
+
+  const rows=parse8A(matrix);
+
+  if(!rows.length){
+    throw new Error(
+      "No Khata records were detected. Please make sure you are uploading the original 8-A Excel file."
+    );
+  }
+
+  setStatus("Preparing preview...",85);
+  return rows;
+}
+
+function render(){
+  body.innerHTML="";
+
+  if(!result.length){
+    body.innerHTML='<tr><td colspan="4" class="empty">No records found.</td></tr>';
+    return;
+  }
+
+  result.forEach(x=>{
+    const tr=document.createElement("tr");
+    [x.account,x.name,x.area,x.assessment].forEach(v=>{
+      const td=document.createElement("td");
+      td.textContent=v;
+      tr.appendChild(td);
+    });
+    body.appendChild(tr);
+  });
+
+  count.textContent=result.length+" records";
+  badge.textContent=result.length+" records";
+}
+
+function download(){
+  if(!result.length){
+    setStatus("There is no processed data to download.",0,"error");
+    return;
+  }
+
+  const data=[
+    ["Khata Number","Khatedar Name","Area (0000.00)","Aakar Judi"],
+    ...result.map(x=>[
+      String(x.account),
+      String(x.name),
+      String(x.area),
+      String(x.assessment)
+    ])
+  ];
+
+  const ws=XLSX.utils.aoa_to_sheet(data);
+  ws["!cols"]=[
+    {wch:16},{wch:45},{wch:20},{wch:16}
+  ];
+
+  /*
+    Keep Area and Aakar Judi as text so formatting is preserved.
+  */
+  for(let r=2;r<=data.length;r++){
+    if(ws["C"+r]){ws["C"+r].t="s";ws["C"+r].z="@";}
+    if(ws["D"+r]){ws["D"+r].t="s";ws["D"+r].z="@";}
+  }
+
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,"8-A Data");
+  XLSX.writeFile(wb,"8A_Excel_Maker_Result.xlsx");
+}
+
+fileEl.addEventListener("change",()=>{
+  const f=fileEl.files[0];
+  fileName.textContent=f?"Selected file: "+f.name:"No file selected.";
+  if(f)setStatus("File selected. Click Process Excel.",0);
+});
+
+drop.addEventListener("dragover",e=>e.preventDefault());
+drop.addEventListener("drop",e=>{
+  e.preventDefault();
+  if(e.dataTransfer.files.length){
+    fileEl.files=e.dataTransfer.files;
+    fileName.textContent="Selected file: "+fileEl.files[0].name;
+    setStatus("File selected. Click Process Excel.",0);
+  }
+});
+
+go.addEventListener("click",async()=>{
+  const f=fileEl.files[0];
+
+  if(!f){
+    setStatus("Please select an Excel file first.",0,"error");
+    return;
+  }
+
+  if(!/\.(xlsx|xls|csv)$/i.test(f.name)){
+    setStatus("Invalid file type. Please upload XLSX, XLS or CSV.",0,"error");
+    return;
+  }
+
+  go.disabled=true;
+  dl.disabled=true;
+  result=[];
+  body.innerHTML='<tr><td colspan="4" class="empty">Processing...</td></tr>';
+  count.textContent="0 records";
+  badge.textContent="0 records";
+
+  try{
+    result=await readExcel(f);
+    render();
+    setStatus(
+      "Processing completed successfully. Your Excel file is ready.",
+      100,
+      "success"
+    );
+    dl.disabled=false;
+  }catch(e){
+    console.error(e);
+    setStatus(
+      "Processing failed: "+(e.message||"Unknown error."),
+      0,
+      "error"
+    );
+    body.innerHTML='<tr><td colspan="4" class="empty">No result available.</td></tr>';
+  }finally{
+    go.disabled=false;
+  }
+});
+
+dl.addEventListener("click",download);
+
+})();
+</script>
+</body>
+</html>
