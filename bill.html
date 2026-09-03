@@ -9,9 +9,14 @@
   name="viewport"
   content="width=device-width, initial-scale=1.0">
 
-<title>Payment Bill - TCM Guide Gujarat</title>
+<title>Invoice - Mahamantra Web Services</title>
+
 
 <style>
+
+/* =====================================================
+   BASIC
+===================================================== */
 
 *{
   box-sizing:border-box;
@@ -23,180 +28,536 @@ body{
 
   padding:20px;
 
+  background:#f3f4f6;
+
   font-family:
     Arial,
     "Noto Sans Gujarati",
     sans-serif;
 
-  background:#f1f5f9;
-
-  color:#1f2937;
+  color:#334155;
 
 }
 
-.bill-container{
+
+/* =====================================================
+   INVOICE
+===================================================== */
+
+.invoice{
 
   width:100%;
 
-  max-width:800px;
+  max-width:900px;
 
-  margin:30px auto;
+  margin:20px auto;
 
   background:#ffffff;
 
-  padding:35px;
-
-  border-radius:12px;
+  padding:45px 50px;
 
   box-shadow:
-    0 5px 25px
+    0 4px 20px
     rgba(0,0,0,.10);
 
 }
 
-.bill-header{
 
-  text-align:center;
+/* =====================================================
+   HEADER
+===================================================== */
 
-  border-bottom:
-    2px solid #1e293b;
+.invoice-header{
 
-  padding-bottom:20px;
+  display:flex;
 
-  margin-bottom:25px;
+  justify-content:space-between;
+
+  align-items:flex-start;
+
+  gap:30px;
+
+  padding-bottom:10px;
 
 }
 
-.bill-header h1{
+
+/* LEFT HEADER */
+
+.company-section{
+
+  display:flex;
+
+  align-items:flex-start;
+
+  gap:15px;
+
+}
+
+
+/* LOGO */
+
+.company-logo{
+
+  width:95px;
+
+  height:95px;
+
+  object-fit:contain;
+
+  flex-shrink:0;
+
+}
+
+
+/* COMPANY */
+
+.company-info{
+
+  padding-top:2px;
+
+}
+
+.company-name{
 
   margin:0;
 
-  font-size:28px;
+  font-size:30px;
 
-  color:#0f172a;
+  line-height:1.1;
+
+  font-weight:800;
+
+  color:#102a43;
+
+  letter-spacing:.3px;
 
 }
 
-.bill-header h2{
+.company-subtitle{
 
-  margin:8px 0 0;
+  margin-top:8px;
 
-  font-size:17px;
+  font-size:15px;
 
-  font-weight:500;
+  font-weight:700;
+
+  color:#173b5f;
+
+}
+
+.company-owner{
+
+  margin-top:5px;
+
+  font-size:13px;
+
+  font-weight:600;
+
+  color:#374151;
+
+}
+
+.company-address{
+
+  margin-top:5px;
+
+  font-size:12px;
 
   color:#475569;
 
 }
 
-.bill-title{
+.company-email{
 
-  text-align:center;
+  margin-top:5px;
 
-  margin-bottom:25px;
+  font-size:12px;
+
+  color:#475569;
 
 }
 
-.bill-title span{
 
-  display:inline-block;
+/* =====================================================
+   INVOICE RIGHT
+===================================================== */
 
-  padding:8px 25px;
+.invoice-title{
 
-  border-radius:6px;
+  text-align:right;
 
-  background:#e2e8f0;
+  min-width:180px;
 
-  font-size:18px;
+}
+
+.invoice-title h1{
+
+  margin:0;
+
+  font-size:31px;
+
+  letter-spacing:1px;
+
+  color:#9ab1c7;
+
+  font-weight:800;
+
+}
+
+.invoice-details{
+
+  margin-top:12px;
+
+  font-size:12px;
 
   font-weight:700;
 
+  color:#475569;
+
 }
 
-.bill-table{
+.invoice-details div{
+
+  margin-top:8px;
+
+}
+
+.invoice-details span{
+
+  display:inline-block;
+
+  min-width:75px;
+
+}
+
+
+/* =====================================================
+   LINE
+===================================================== */
+
+.header-line{
+
+  height:2px;
+
+  background:#102a43;
+
+  margin-top:8px;
+
+  margin-bottom:18px;
+
+}
+
+
+/* =====================================================
+   VILLAGE DETAILS
+===================================================== */
+
+.location-box{
+
+  display:grid;
+
+  grid-template-columns:
+    1fr
+    1fr
+    1fr;
+
+  gap:15px;
+
+  border:1px solid #cbd5e1;
+
+  border-radius:4px;
+
+  padding:9px 12px;
+
+  margin-bottom:18px;
+
+  background:#fafafa;
+
+}
+
+.location-item{
+
+  font-size:13px;
+
+  font-weight:700;
+
+  color:#263746;
+
+}
+
+.location-value{
+
+  font-weight:500;
+
+  margin-left:5px;
+
+  border-bottom:1px dotted #64748b;
+
+  display:inline-block;
+
+  min-width:120px;
+
+}
+
+
+/* =====================================================
+   ITEMS TABLE
+===================================================== */
+
+.items-table{
 
   width:100%;
 
   border-collapse:collapse;
 
-  margin-top:10px;
+  margin-top:5px;
 
 }
 
-.bill-table th,
-.bill-table td{
+.items-table th{
 
-  border:
-    1px solid #cbd5e1;
+  background:#102a43;
 
-  padding:12px;
+  color:#ffffff;
 
-  text-align:left;
-
-  font-size:14px;
-
-}
-
-.bill-table th{
-
-  width:40%;
-
-  background:#f8fafc;
-
-  font-weight:700;
-
-}
-
-.amount-row td{
-
-  font-size:17px;
-
-  font-weight:700;
-
-}
-
-.status-paid{
-
-  color:#166534;
-
-  font-weight:700;
-
-}
-
-.bill-footer{
-
-  margin-top:25px;
-
-  padding-top:18px;
-
-  border-top:
-    1px solid #cbd5e1;
+  padding:11px 12px;
 
   font-size:13px;
 
+  text-align:left;
+
+}
+
+.items-table th:nth-child(1){
+
+  width:60px;
+
+}
+
+.items-table th:nth-child(3){
+
+  width:100px;
+
+  text-align:center;
+
+}
+
+.items-table th:nth-child(4){
+
+  width:130px;
+
+  text-align:right;
+
+}
+
+.items-table td{
+
+  padding:13px 12px;
+
+  border-bottom:1px solid #e2e8f0;
+
+  font-size:13px;
+
+  vertical-align:top;
+
+}
+
+.items-table td:nth-child(1){
+
+  text-align:center;
+
+}
+
+.items-table td:nth-child(3){
+
+  text-align:center;
+
+}
+
+.items-table td:nth-child(4){
+
+  text-align:right;
+
+  font-weight:600;
+
+}
+
+.item-name{
+
+  font-weight:700;
+
+  color:#334155;
+
+  font-size:13px;
+
+}
+
+.item-description{
+
+  margin-top:4px;
+
   color:#64748b;
+
+  font-size:11px;
+
+}
+
+
+/* =====================================================
+   TOTAL
+===================================================== */
+
+.total-area{
+
+  display:flex;
+
+  justify-content:flex-end;
+
+  margin-top:22px;
+
+}
+
+.total-box{
+
+  width:310px;
+
+  border-top:2px solid #102a43;
+
+  border-bottom:2px solid #102a43;
+
+  background:#f1f5f9;
+
+  padding:11px 15px;
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+}
+
+.total-label{
+
+  font-size:16px;
+
+  font-weight:700;
+
+  color:#526174;
+
+}
+
+.total-value{
+
+  font-size:17px;
+
+  font-weight:800;
+
+  color:#102a43;
+
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.footer-area{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:flex-start;
+
+  margin-top:35px;
+
+  padding-top:18px;
+
+  border-top:1px dashed #cbd5e1;
+
+  min-height:100px;
+
+}
+
+.footer-note{
+
+  font-size:13px;
+
+  font-weight:700;
+
+  color:#475569;
 
   line-height:1.6;
 
 }
 
+.footer-note small{
+
+  display:block;
+
+  margin-top:4px;
+
+  font-size:11px;
+
+  font-weight:400;
+
+  font-style:italic;
+
+  color:#94a3b8;
+
+}
+
+
+/* =====================================================
+   PAID STAMP
+===================================================== */
+
+.paid-stamp{
+
+  border:3px solid #3da66a;
+
+  color:#3da66a;
+
+  font-size:26px;
+
+  font-weight:900;
+
+  letter-spacing:4px;
+
+  padding:7px 17px;
+
+  transform:rotate(-15deg);
+
+  border-radius:7px;
+
+  margin-right:20px;
+
+  margin-top:-10px;
+
+}
+
+
+/* =====================================================
+   PRINT BUTTON
+===================================================== */
+
 .print-button{
 
   display:block;
 
-  margin:25px auto 0;
-
-  height:44px;
-
-  padding:0 25px;
+  margin:30px auto 10px;
 
   border:none;
 
-  border-radius:7px;
+  border-radius:6px;
 
-  background:#2563eb;
+  padding:12px 30px;
 
-  color:white;
+  background:#102a43;
+
+  color:#ffffff;
 
   font-size:15px;
 
@@ -208,9 +569,14 @@ body{
 
 .print-button:hover{
 
-  background:#1d4ed8;
+  background:#173b5f;
 
 }
+
+
+/* =====================================================
+   ERROR
+===================================================== */
 
 .error-box{
 
@@ -218,19 +584,145 @@ body{
 
   margin:100px auto;
 
-  padding:25px;
+  background:#ffffff;
 
-  background:white;
-
-  border-radius:10px;
+  padding:30px;
 
   text-align:center;
 
-  color:#dc2626;
+  border-radius:8px;
 
   box-shadow:
-    0 5px 25px
+    0 5px 20px
     rgba(0,0,0,.10);
+
+  color:#dc2626;
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:700px){
+
+  body{
+
+    padding:8px;
+
+  }
+
+  .invoice{
+
+    padding:25px 18px;
+
+    margin:5px auto;
+
+  }
+
+  .invoice-header{
+
+    flex-direction:column;
+
+    gap:20px;
+
+  }
+
+  .company-section{
+
+    width:100%;
+
+  }
+
+  .company-logo{
+
+    width:75px;
+
+    height:75px;
+
+  }
+
+  .company-name{
+
+    font-size:23px;
+
+  }
+
+  .invoice-title{
+
+    width:100%;
+
+    text-align:left;
+
+  }
+
+  .invoice-title h1{
+
+    font-size:27px;
+
+  }
+
+  .location-box{
+
+    grid-template-columns:1fr;
+
+    gap:8px;
+
+  }
+
+  .items-table th,
+  .items-table td{
+
+    padding:9px 6px;
+
+    font-size:11px;
+
+  }
+
+  .items-table th:nth-child(1){
+
+    width:35px;
+
+  }
+
+  .items-table th:nth-child(3){
+
+    width:55px;
+
+  }
+
+  .items-table th:nth-child(4){
+
+    width:80px;
+
+  }
+
+  .item-name{
+
+    font-size:11px;
+
+  }
+
+  .item-description{
+
+    font-size:9px;
+
+  }
+
+  .total-box{
+
+    width:100%;
+
+  }
+
+  .footer-area{
+
+    flex-direction:column;
+
+    gap:25px;
+
+  }
 
 }
 
@@ -241,15 +733,25 @@ body{
 
 @media print{
 
+  @page{
+
+    size:A4;
+
+    margin:10mm;
+
+  }
+
   body{
 
-    background:white;
+    background:#ffffff;
 
     padding:0;
 
   }
 
-  .bill-container{
+  .invoice{
+
+    width:100%;
 
     max-width:none;
 
@@ -259,69 +761,11 @@ body{
 
     box-shadow:none;
 
-    border-radius:0;
-
   }
 
   .print-button{
 
     display:none;
-
-  }
-
-  .bill-footer{
-
-    color:#334155;
-
-  }
-
-}
-
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media(max-width:600px){
-
-  body{
-
-    padding:10px;
-
-  }
-
-  .bill-container{
-
-    margin:10px auto;
-
-    padding:18px;
-
-  }
-
-  .bill-header h1{
-
-    font-size:23px;
-
-  }
-
-  .bill-header h2{
-
-    font-size:14px;
-
-  }
-
-  .bill-table th,
-  .bill-table td{
-
-    padding:9px;
-
-    font-size:13px;
-
-  }
-
-  .bill-table th{
-
-    width:42%;
 
   }
 
@@ -335,17 +779,14 @@ body{
 <body>
 
 
-<div
-  id="billArea">
-
-</div>
+<div id="billArea"></div>
 
 
 <script>
 
 
 /* =====================================================
-   GET URL PARAMETERS
+   GET BILL DATA FROM URL
 ===================================================== */
 
 const params =
@@ -383,15 +824,32 @@ const amount =
 
 
 /* =====================================================
-   BASIC VALIDATION
+   INVOICE NUMBER
+   REQUEST DATE & TIME USED
+===================================================== */
+
+const invoiceNumber =
+  requestDate !== "-"
+    ? requestDate
+    : "-";
+
+
+/* =====================================================
+   VALIDATION
 ===================================================== */
 
 if(
+
   revenueYear === "-" &&
+
   email === "-" &&
+
   village === "-" &&
+
   taluka === "-" &&
+
   district === "-"
+
 ){
 
   document.getElementById(
@@ -421,198 +879,322 @@ if(
 
 else{
 
+
   document.getElementById(
     "billArea"
   ).innerHTML = `
 
-    <div class="bill-container">
+    <div class="invoice">
 
 
-      <div class="bill-header">
+      <!-- ============================================
+           HEADER
+      ============================================= -->
 
-        <h1>
-          TCM GUIDE GUJARAT
-        </h1>
 
-        <h2>
-          Sahajanand Web Service
-        </h2>
-        <h2>
-          Email: tcmguidegujarat@gmail.com
-        </h2>
+      <div class="invoice-header">
+
+
+        <div class="company-section">
+
+
+          <img
+            src="./logo.png"
+            class="company-logo"
+            alt="Mahamantra Web Services Logo">
+
+
+          <div class="company-info">
+
+
+            <h1 class="company-name">
+
+              Mahamantra Web<br>
+              Services
+
+            </h1>
+
+
+            <div class="company-subtitle">
+
+              Web and App Designing
+
+            </div>
+
+
+            <div class="company-owner">
+
+              Pro. Mrial S Patel
+
+            </div>
+
+
+            <div class="company-address">
+
+              Add: Gotri, Vadodara (Guj) - 390007
+
+            </div>
+
+
+            <div class="company-email">
+
+              Email: tcmguidegujarat@gmail.com
+
+            </div>
+
+
+          </div>
+
+
+        </div>
+
+
+        <!-- INVOICE -->
+
+
+        <div class="invoice-title">
+
+
+          <h1>
+            INVOICE
+          </h1>
+
+
+          <div class="invoice-details">
+
+
+            <div>
+
+              <span>
+                Invoice No:
+              </span>
+
+              ${escapeHTML(invoiceNumber)}
+
+            </div>
+
+
+            <div>
+
+              <span>
+                Date:
+              </span>
+
+              ${escapeHTML(requestDate)}
+
+            </div>
+
+
+          </div>
+
+
+        </div>
+
+
       </div>
 
 
-      <div class="bill-title">
-
-        <span>
-          PAYMENT RECEIPT
-        </span>
-
-      </div>
+      <div class="header-line"></div>
 
 
-      <table class="bill-table">
+      <!-- ============================================
+           VILLAGE / TALUKA / DISTRICT
+      ============================================= -->
 
 
-        <tr>
-
-          <th>
-            Revenue Year
-          </th>
-
-          <td>
-            ${escapeHTML(revenueYear)}
-          </td>
-
-        </tr>
+      <div class="location-box">
 
 
-        <tr>
+        <div class="location-item">
 
-          <th>
-            Service
-          </th>
+          ગામ:
 
-          <td>
-            Sahajanand Web Services
-          </td>
+          <span class="location-value">
 
-        </tr>
-
-
-        <tr>
-
-          <th>
-            Quantity
-          </th>
-
-          <td>
-            01
-          </td>
-
-        </tr>
-
-
-        <tr class="amount-row">
-
-          <th>
-            Paid Amount
-          </th>
-
-          <td>
-            Rs. ${escapeHTML(amount)}/-
-          </td>
-
-        </tr>
-
-
-        <tr>
-
-          <th>
-            Email ID
-          </th>
-
-          <td>
-            ${escapeHTML(email)}
-          </td>
-
-        </tr>
-
-
-        <tr>
-
-          <th>
-            Village
-          </th>
-
-          <td>
             ${escapeHTML(village)}
-          </td>
 
-        </tr>
+          </span>
+
+        </div>
 
 
-        <tr>
+        <div class="location-item">
 
-          <th>
-            Taluka
-          </th>
+          તાલુકો:
 
-          <td>
+          <span class="location-value">
+
             ${escapeHTML(taluka)}
-          </td>
 
-        </tr>
+          </span>
+
+        </div>
 
 
-        <tr>
+        <div class="location-item">
 
-          <th>
-            District
-          </th>
+          જિલ્લો:
 
-          <td>
+          <span class="location-value">
+
             ${escapeHTML(district)}
-          </td>
 
-        </tr>
+          </span>
 
-
-        <tr>
-
-          <th>
-            Request Date & Time
-          </th>
-
-          <td>
-            ${escapeHTML(requestDate)}
-          </td>
-
-        </tr>
+        </div>
 
 
-        <tr>
+      </div>
 
-          <th>
-            Payment Status
-          </th>
 
-          <td class="status-paid">
-            PAID
-          </td>
+      <!-- ============================================
+           ITEM TABLE
+      ============================================= -->
 
-        </tr>
+
+      <table class="items-table">
+
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Sr.<br>No.
+            </th>
+
+            <th>
+              Items
+            </th>
+
+            <th>
+              Quantity
+            </th>
+
+            <th>
+              Amount
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          <tr>
+
+
+            <td>
+              1
+            </td>
+
+
+            <td>
+
+              <div class="item-name">
+
+                Revenue Hisab bandh web services
+
+              </div>
+
+
+              <div class="item-description">
+
+                Subscription - ${escapeHTML(revenueYear)}
+
+              </div>
+
+            </td>
+
+
+            <td>
+              1
+            </td>
+
+
+            <td>
+
+              ₹ ${escapeHTML(amount)}.00
+
+            </td>
+
+
+          </tr>
+
+
+        </tbody>
 
 
       </table>
 
 
-      <div class="bill-footer">
+      <!-- ============================================
+           TOTAL
+      ============================================= -->
 
-        This is a system generated payment receipt.
 
-        <br>
+      <div class="total-area">
 
-        Signature is not required.
 
-        <br><br>
+        <div class="total-box">
 
-        Thank you for using TCM Guide Gujarat.
 
-        <br>
+          <div class="total-label">
 
-        TCM Guide Gujarat
+            Total Amount:
 
-        <br>
+          </div>
 
-        Sahajanand Web Services
 
-        <br>
+          <div class="total-value">
 
-        Revenue Hisabbandh Management
+            ₹ ${escapeHTML(amount)}.00
+
+          </div>
+
+
+        </div>
+
 
       </div>
+
+
+      <!-- ============================================
+           FOOTER
+      ============================================= -->
+
+
+      <div class="footer-area">
+
+
+        <div class="footer-note">
+
+
+          This is system generated bill, signature not required.
+
+
+          <small>
+
+            Note: Accuracy and security depends on data provided.
+
+          </small>
+
+
+        </div>
+
+
+        <div class="paid-stamp">
+
+          PAID
+
+        </div>
+
+
+      </div>
+
+
+      <!-- PRINT -->
 
 
       <button
